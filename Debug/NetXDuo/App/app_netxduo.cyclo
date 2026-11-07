@@ -1,0 +1,7 @@
+../NetXDuo/App/app_netxduo.c:116:6:MX_NetXDuo_Init	23
+../NetXDuo/App/app_netxduo.c:365:13:ip_address_change_notify_callback	1
+../NetXDuo/App/app_netxduo.c:378:13:nx_app_thread_entry	5
+../NetXDuo/App/app_netxduo.c:436:6:webserver_request_notify_callback	19
+../NetXDuo/App/app_netxduo.c:577:6:nx_server_thread_entry	3
+../NetXDuo/App/app_netxduo.c:623:6:LedThread_Entry	1
+../NetXDuo/App/app_netxduo.c:640:13:App_Link_Thread_Entry	5

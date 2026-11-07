@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STM32 Industrial Monitor</title>
+  <meta name="description" content="Real-time industrial sensor dashboard powered by STM32H753 + Azure RTOS ThreadX + NetXDuo">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="header" id="header">
+    <div class="header-left">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" rx="10" fill="url(#grad1)"/>
+          <rect x="8" y="8" width="10" height="10" rx="2" fill="white" opacity="0.9"/>
+          <rect x="22" y="8" width="10" height="10" rx="2" fill="white" opacity="0.5"/>
+          <rect x="8" y="22" width="10" height="10" rx="2" fill="white" opacity="0.5"/>
+          <rect x="22" y="22" width="10" height="10" rx="2" fill="white" opacity="0.9"/>
+          <line x1="18" y1="13" x2="22" y2="13" stroke="white" stroke-width="2" opacity="0.7"/>
+          <line x1="27" y1="18" x2="27" y2="22" stroke="white" stroke-width="2" opacity="0.7"/>
+          <defs>
+            <linearGradient id="grad1" x1="0" y1="0" x2="40" y2="40">
+              <stop offset="0%" stop-color="#00d4ff"/>
+              <stop offset="100%" stop-color="#0066ff"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="logo-text">
+          <span class="logo-title">STM32 Industrial Monitor</span>
+          <span class="logo-sub">STM32H753 · Azure RTOS ThreadX · NetXDuo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="hdr-stat">
+        <span class="hdr-label">Device IP</span>
+        <span class="hdr-value mono" id="device-ip">--- . --- . --- . ---</span>
+      </div>
+      <div class="hdr-divider"></div>
+      <div class="hdr-stat">
+        <span class="hdr-label">Uptime</span>
+        <span class="hdr-value mono" id="uptime">00 : 00 : 00</span>
+      </div>
+      <div class="hdr-divider"></div>
+      <div class="hdr-stat">
+        <span class="hdr-label">Acq. Rate</span>
+        <span class="hdr-value mono">500 ms</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <span class="sim-badge" id="sim-badge" title="Sensor Simulation Active">⚡ SIM MODE</span>
+      <div class="conn-indicator">
+        <span class="conn-dot" id="conn-dot"></span>
+        <span class="conn-label" id="conn-label">Connecting…</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ALERT BANNER (hidden by default)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="alert-banner" id="alert-banner">
+    <span class="alert-icon">⚠</span>
+    <span id="alert-text">ALERT</span>
+    <button class="alert-close" onclick="document.getElementById('alert-banner').classList.remove('visible')">✕</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════════════════════ -->
+  <main class="main">
+
+    <!-- ── Sensor Cards Grid ─────────────────────────────── -->
+    <section class="section-title">
+      <span>Live Sensor Data</span>
+      <span class="section-dot blink"></span>
+    </section>
+
+    <div class="sensors-grid">
+
+      <!-- TEMPERATURE -->
+      <div class="sensor-card" id="card-temp">
+        <div class="card-glow" style="--glow-color: #ff6b6b;"></div>
+        <div class="card-header">
+          <div class="card-icon-wrap" style="--icon-color: #ff6b6b;">🌡️</div>
+          <div class="card-title-wrap">
+            <span class="card-title">Temperature</span>
+            <span class="card-sensor">PT100 / MAX31865</span>
+          </div>
+          <span class="status-badge ok" id="status-temp">OK</span>
+        </div>
+        <div class="gauge-wrap">
+          <canvas id="gauge-temp" width="200" height="200"></canvas>
+          <div class="gauge-center">
+            <span class="gauge-val" id="val-temp">--.-</span>
+            <span class="gauge-unit">°C</span>
+          </div>
+        </div>
+        <div class="card-range">
+          <span>-50°C</span>
+          <div class="range-bar"><div class="range-fill" id="bar-temp" style="--bar-color:#ff6b6b;"></div></div>
+          <span>+150°C</span>
+        </div>
+      </div>
+
+      <!-- PRESSURE -->
+      <div class="sensor-card" id="card-pres">
+        <div class="card-glow" style="--glow-color: #4ecdc4;"></div>
+        <div class="card-header">
+          <div class="card-icon-wrap" style="--icon-color: #4ecdc4;">🌬️</div>
+          <div class="card-title-wrap">
+            <span class="card-title">Pressure</span>
+            <span class="card-sensor">BMP280 / I2C1</span>
+          </div>
+          <span class="status-badge ok" id="status-pres">OK</span>
+        </div>
+        <div class="gauge-wrap">
+          <canvas id="gauge-pres" width="200" height="200"></canvas>
+          <div class="gauge-center">
+            <span class="gauge-val" id="val-pres">----</span>
+            <span class="gauge-unit">hPa</span>
+          </div>
+        </div>
+        <div class="card-range">
+          <span>800</span>
+          <div class="range-bar"><div class="range-fill" id="bar-pres" style="--bar-color:#4ecdc4;"></div></div>
+          <span>1200</span>
+        </div>
+      </div>
+
+      <!-- LEVEL -->
+      <div class="sensor-card" id="card-lvl">
+        <div class="card-glow" style="--glow-color: #45b7d1;"></div>
+        <div class="card-header">
+          <div class="card-icon-wrap" style="--icon-color: #45b7d1;">💧</div>
+          <div class="card-title-wrap">
+            <span class="card-title">Level</span>
+            <span class="card-sensor">HC-SR04 / TIM2</span>
+          </div>
+          <span class="status-badge ok" id="status-lvl">OK</span>
+        </div>
+        <div class="gauge-wrap">
+          <canvas id="gauge-lvl" width="200" height="200"></canvas>
+          <div class="gauge-center">
+            <span class="gauge-val" id="val-lvl">---</span>
+            <span class="gauge-unit">cm</span>
+          </div>
+        </div>
+        <div class="card-range">
+          <span>0 cm</span>
+          <div class="range-bar"><div class="range-fill" id="bar-lvl" style="--bar-color:#45b7d1;"></div></div>
+          <span>200 cm</span>
+        </div>
+      </div>
+
+      <!-- RPM -->
+      <div class="sensor-card" id="card-rpm">
+        <div class="card-glow" style="--glow-color: #96ceb4;"></div>
+        <div class="card-header">
+          <div class="card-icon-wrap" style="--icon-color: #96ceb4;">⚙️</div>
+          <div class="card-title-wrap">
+            <span class="card-title">Speed</span>
+            <span class="card-sensor">Encoder / TIM3</span>
+          </div>
+          <span class="status-badge ok" id="status-rpm">OK</span>
+        </div>
+        <div class="gauge-wrap">
+          <canvas id="gauge-rpm" width="200" height="200"></canvas>
+          <div class="gauge-center">
+            <span class="gauge-val" id="val-rpm">----</span>
+            <span class="gauge-unit">RPM</span>
+          </div>
+        </div>
+        <div class="card-range">
+          <span>0</span>
+          <div class="range-bar"><div class="range-fill" id="bar-rpm" style="--bar-color:#96ceb4;"></div></div>
+          <span>3000</span>
+        </div>
+      </div>
+
+      <!-- CURRENT -->
+      <div class="sensor-card" id="card-curr">
+        <div class="card-glow" style="--glow-color: #ffd93d;"></div>
+        <div class="card-header">
+          <div class="card-icon-wrap" style="--icon-color: #ffd93d;">⚡</div>
+          <div class="card-title-wrap">
+            <span class="card-title">Current</span>
+            <span class="card-sensor">ACS712 / ADC3</span>
+          </div>
+          <span class="status-badge ok" id="status-curr">OK</span>
+        </div>
+        <div class="gauge-wrap">
+          <canvas id="gauge-curr" width="200" height="200"></canvas>
+          <div class="gauge-center">
+            <span class="gauge-val" id="val-curr">-.-</span>
+            <span class="gauge-unit">A</span>
+          </div>
+        </div>
+        <div class="card-range">
+          <span>0 A</span>
+          <div class="range-bar"><div class="range-fill" id="bar-curr" style="--bar-color:#ffd93d;"></div></div>
+          <span>20 A</span>
+        </div>
+      </div>
+
+      <!-- GAS -->
+      <div class="sensor-card" id="card-gas">
+        <div class="card-glow" style="--glow-color: #ff6348;"></div>
+        <div class="card-header">
+          <div class="card-icon-wrap" style="--icon-color: #ff6348;">🌫️</div>
+          <div class="card-title-wrap">
+            <span class="card-title">Gas</span>
+            <span class="card-sensor">MQ2 / ADC3</span>
+          </div>
+          <span class="status-badge ok" id="status-gas">OK</span>
+        </div>
+        <div class="gauge-wrap">
+          <canvas id="gauge-gas" width="200" height="200"></canvas>
+          <div class="gauge-center">
+            <span class="gauge-val" id="val-gas">--.-</span>
+            <span class="gauge-unit">%</span>
+          </div>
+        </div>
+        <div class="card-range">
+          <span>0%</span>
+          <div class="range-bar"><div class="range-fill" id="bar-gas" style="--bar-color:#ff6348;"></div></div>
+          <span>100%</span>
+        </div>
+      </div>
+
+      <!-- LIGHT -->
+      <div class="sensor-card" id="card-light">
+        <div class="card-glow" style="--glow-color: #a8dadc;"></div>
+        <div class="card-header">
+          <div class="card-icon-wrap" style="--icon-color: #a8dadc;">💡</div>
+          <div class="card-title-wrap">
+            <span class="card-title">Light</span>
+            <span class="card-sensor">BH1750 / I2C1</span>
+          </div>
+          <span class="status-badge ok" id="status-light">OK</span>
+        </div>
+        <div class="gauge-wrap">
+          <canvas id="gauge-light" width="200" height="200"></canvas>
+          <div class="gauge-center">
+            <span class="gauge-val" id="val-light">---</span>
+            <span class="gauge-unit">lux</span>
+          </div>
+        </div>
+        <div class="card-range">
+          <span>0</span>
+          <div class="range-bar"><div class="range-fill" id="bar-light" style="--bar-color:#a8dadc;"></div></div>
+          <span>1200</span>
+        </div>
+      </div>
+
+    </div><!-- /sensors-grid -->
+
+    <!-- ── History Charts ────────────────────────────────── -->
+    <section class="section-title" style="margin-top:2rem;">
+      <span>Historical Trends</span>
+      <span class="section-sub">Last 60 seconds</span>
+    </section>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <span class="chart-icon" style="color:#ff6b6b;">🌡️</span>
+          <h3>Temperature &amp; Pressure</h3>
+        </div>
+        <div class="chart-body">
+          <canvas id="chart-tp"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <span class="chart-icon" style="color:#96ceb4;">⚙️</span>
+          <h3>RPM &amp; Current</h3>
+        </div>
+        <div class="chart-body">
+          <canvas id="chart-rc"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── System Stats Bar ──────────────────────────────── -->
+    <div class="sys-bar">
+      <div class="sys-item">
+        <span class="sys-label">TX Resumptions</span>
+        <span class="sys-val mono" id="sys-res">—</span>
+      </div>
+      <div class="sys-item">
+        <span class="sys-label">TX Suspensions</span>
+        <span class="sys-val mono" id="sys-sus">—</span>
+      </div>
+      <div class="sys-item">
+        <span class="sys-label">Acq. Cycles</span>
+        <span class="sys-val mono" id="sys-acq">—</span>
+      </div>
+      <div class="sys-item">
+        <span class="sys-label">Idle Returns</span>
+        <span class="sys-val mono" id="sys-idle">—</span>
+      </div>
+      <div class="sys-item">
+        <span class="sys-label">Non-Idle</span>
+        <span class="sys-val mono" id="sys-nidle">—</span>
+      </div>
+      <div class="sys-item">
+        <span class="sys-label">Mode</span>
+        <span class="sys-val mono" id="sys-mode" style="color:#00d4ff;">SIMULATION</span>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <span>STM32H753 Industrial Monitor · Azure RTOS ThreadX + NetXDuo · All rights reserved © 2026</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

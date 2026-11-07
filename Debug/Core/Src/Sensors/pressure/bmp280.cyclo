@@ -1,0 +1,7 @@
+../Core/Src/Sensors/pressure/bmp280.c:21:26:BMP280_WriteReg	1
+../Core/Src/Sensors/pressure/bmp280.c:28:26:BMP280_ReadRegs	1
+../Core/Src/Sensors/pressure/bmp280.c:36:6:BMP280_Init	3
+../Core/Src/Sensors/pressure/bmp280.c:69:14:BMP280_CompensateTemp	1
+../Core/Src/Sensors/pressure/bmp280.c:82:7:BMP280_ReadTemperature	2
+../Core/Src/Sensors/pressure/bmp280.c:91:7:BMP280_ReadPressure	3
+../Core/Src/Sensors/pressure/bmp280.c:123:9:BMP280_IsOk	1

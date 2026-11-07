@@ -1,0 +1,11 @@
+../Core/Src/API/api_handler.c:14:20:bool_str	2
+../Core/Src/API/api_handler.c:15:20:ok_str	2
+../Core/Src/API/api_handler.c:28:6:API_GetTemp	2
+../Core/Src/API/api_handler.c:45:6:API_GetPressure	1
+../Core/Src/API/api_handler.c:60:6:API_GetLevel	1
+../Core/Src/API/api_handler.c:75:6:API_GetRPM	1
+../Core/Src/API/api_handler.c:89:6:API_GetCurrent	1
+../Core/Src/API/api_handler.c:106:6:API_GetGas	1
+../Core/Src/API/api_handler.c:123:6:API_GetLight	1
+../Core/Src/API/api_handler.c:141:6:API_GetAll	2
+../Core/Src/API/api_handler.c:194:6:API_GetSystem	1

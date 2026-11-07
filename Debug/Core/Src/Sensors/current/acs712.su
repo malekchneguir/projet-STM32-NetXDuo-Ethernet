@@ -1,0 +1,3 @@
+../Core/Src/Sensors/current/acs712.c:9:6:ACS712_Init	8	static
+../Core/Src/Sensors/current/acs712.c:16:7:ACS712_ReadVoltage	24	static
+../Core/Src/Sensors/current/acs712.c:33:7:ACS712_ReadCurrentA	24	static

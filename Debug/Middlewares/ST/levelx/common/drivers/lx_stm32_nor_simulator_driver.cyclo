@@ -1,0 +1,6 @@
+../Middlewares/ST/levelx/common/drivers/lx_stm32_nor_simulator_driver.c:29:13:mem_set	2
+../Middlewares/ST/levelx/common/drivers/lx_stm32_nor_simulator_driver.c:38:7:lx_stm32_nor_simulator_initialize	2
+../Middlewares/ST/levelx/common/drivers/lx_stm32_nor_simulator_driver.c:68:14:lx_nor_simulator_read	1
+../Middlewares/ST/levelx/common/drivers/lx_stm32_nor_simulator_driver.c:77:14:lx_nor_simulator_write	1
+../Middlewares/ST/levelx/common/drivers/lx_stm32_nor_simulator_driver.c:85:14:lx_nor_simulator_block_erase	1
+../Middlewares/ST/levelx/common/drivers/lx_stm32_nor_simulator_driver.c:102:14:lx_nor_simulator_block_erased_verify	3

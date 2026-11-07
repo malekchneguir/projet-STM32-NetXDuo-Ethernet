@@ -1,0 +1,5 @@
+../Core/Src/Sensors/sensor_manager.c:102:13:SensorAcq_Thread_Entry	72	static
+../Core/Src/Sensors/sensor_manager.c:184:6:Sensor_Init	48	static
+../Core/Src/Sensors/sensor_manager.c:207:6:Sensor_GetData	16	static
+../Core/Src/Sensors/sensor_manager.c:217:12:Sensor_GetThread	4	static
+../Core/Src/Sensors/sensor_manager.c:222:11:Sensor_GetMutex	4	static

@@ -1,0 +1,3 @@
+../Core/Src/Sensors/current/acs712.c:9:6:ACS712_Init	1
+../Core/Src/Sensors/current/acs712.c:16:7:ACS712_ReadVoltage	2
+../Core/Src/Sensors/current/acs712.c:33:7:ACS712_ReadCurrentA	1

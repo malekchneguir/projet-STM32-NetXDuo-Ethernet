@@ -1,0 +1,2 @@
+../Core/Src/Sensors/level/hcsr04.c:10:6:HCSR04_Init	8	static
+../Core/Src/Sensors/level/hcsr04.c:23:7:HCSR04_ReadDistanceCm	40	static,ignoring_inline_asm

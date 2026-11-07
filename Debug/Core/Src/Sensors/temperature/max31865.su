@@ -1,0 +1,9 @@
+../Core/Src/Sensors/temperature/max31865.c:13:13:CS_Low	8	static
+../Core/Src/Sensors/temperature/max31865.c:14:13:CS_High	8	static
+../Core/Src/Sensors/temperature/max31865.c:16:13:MAX31865_WriteReg	24	static
+../Core/Src/Sensors/temperature/max31865.c:24:16:MAX31865_ReadReg	24	static
+../Core/Src/Sensors/temperature/max31865.c:35:13:MAX31865_ReadRegs	24	static
+../Core/Src/Sensors/temperature/max31865.c:46:6:MAX31865_Init	8	static
+../Core/Src/Sensors/temperature/max31865.c:58:7:MAX31865_ReadTemperature	24	static
+../Core/Src/Sensors/temperature/max31865.c:84:9:MAX31865_IsOk	4	static
+../Core/Src/Sensors/temperature/max31865.c:89:9:MAX31865_ReadFault	4	static

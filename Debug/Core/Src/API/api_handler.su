@@ -1,0 +1,11 @@
+../Core/Src/API/api_handler.c:14:20:bool_str	16	static
+../Core/Src/API/api_handler.c:15:20:ok_str	16	static
+../Core/Src/API/api_handler.c:28:6:API_GetTemp	104	static
+../Core/Src/API/api_handler.c:45:6:API_GetPressure	88	static
+../Core/Src/API/api_handler.c:60:6:API_GetLevel	88	static
+../Core/Src/API/api_handler.c:75:6:API_GetRPM	80	static
+../Core/Src/API/api_handler.c:89:6:API_GetCurrent	96	static
+../Core/Src/API/api_handler.c:106:6:API_GetGas	96	static
+../Core/Src/API/api_handler.c:123:6:API_GetLight	88	static
+../Core/Src/API/api_handler.c:141:6:API_GetAll	280	static
+../Core/Src/API/api_handler.c:194:6:API_GetSystem	152	static

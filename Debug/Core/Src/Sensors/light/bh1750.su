@@ -1,0 +1,3 @@
+../Core/Src/Sensors/light/bh1750.c:10:26:BH1750_SendCmd	24	static
+../Core/Src/Sensors/light/bh1750.c:16:6:BH1750_Init	16	static
+../Core/Src/Sensors/light/bh1750.c:28:7:BH1750_ReadLux	24	static
